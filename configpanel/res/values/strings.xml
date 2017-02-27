@@ -67,4 +67,7 @@
     <string name="notification_slider_mode_none">All notifications</string>
     <string name="notification_slider_mode_vibrate">Vibrate</string>
     <string name="notification_slider_mode_ring">Ring</string>
+
+    <!-- Button settings -->
+    <string name="button_panel_dashboard_summary">Manage notification slider buttons</string>
 </resources>
