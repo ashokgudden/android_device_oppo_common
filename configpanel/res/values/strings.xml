@@ -88,4 +88,6 @@
     <string name="notification_slider_ringer_vibrate">Vibrate</string>
     <string name="notification_slider_ringer_silent">Silent</string>
 
+    <!-- Button settings -->
+    <string name="button_panel_dashboard_summary">Manage notification slider buttons</string>
 </resources>
