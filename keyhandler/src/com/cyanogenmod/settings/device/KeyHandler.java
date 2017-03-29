@@ -176,6 +176,7 @@ public class KeyHandler implements DeviceKeyHandler {
                     mNotificationManager.setZenMode(sSupportedSliderModes.get(scanCode), null, TAG);
                 } else {
                     mAudioManager.setRingerModeInternal(sSupportedSliderModes.get(scanCode));
+                    mNotificationManager.setZenMode(Settings.Global.ZEN_MODE_OFF, null, TAG);
                 }
 
                 doHapticFeedback();
