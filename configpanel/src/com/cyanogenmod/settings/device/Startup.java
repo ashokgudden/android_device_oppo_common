@@ -109,6 +109,7 @@ public class Startup extends BroadcastReceiver {
                 disableComponent(context, ButtonSettings.class.getName());
             } else {
                 enableComponent(context, ButtonSettings.class.getName());
+                ButtonSettings.restoreSliderStates(context);
 
                 // Restore nodes to saved preference values
                 for (String pref : Constants.sButtonPrefKeys) {
@@ -200,10 +201,8 @@ public class Startup extends BroadcastReceiver {
     }
 
     static boolean hasButtonProcs() {
-        return (new File(Constants.NOTIF_SLIDER_TOP_NODE).exists() &&
-            new File(Constants.NOTIF_SLIDER_MIDDLE_NODE).exists() &&
-            new File(Constants.NOTIF_SLIDER_BOTTOM_NODE).exists()) ||
-            new File(Constants.BUTTON_SWAP_NODE).exists();
+        return FileUtils.fileExists(Constants.NOTIF_SLIDER_NODE) ||
+                FileUtils.fileExists(Constants.BUTTON_SWAP_NODE);
     }
 
     static boolean hasOClick() {
