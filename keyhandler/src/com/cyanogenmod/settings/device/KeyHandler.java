@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2015 The CyanogenMod Project
+ * Copyright (C) 2015-2016 The CyanogenMod Project
+ *               2017 The MoKee Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,6 +61,7 @@ import org.cyanogenmod.settings.device.slider.NotificationController;
 import org.cyanogenmod.settings.device.slider.FlashlightController;
 import org.cyanogenmod.settings.device.slider.BrightnessController;
 import org.cyanogenmod.settings.device.slider.RotationController;
+import org.cyanogenmod.settings.device.slider.RingerController;
 
 public class KeyHandler implements DeviceKeyHandler {
 
@@ -116,6 +118,7 @@ public class KeyHandler implements DeviceKeyHandler {
     private final FlashlightController mFlashlightController;
     private final BrightnessController mBrightnessController;
     private final RotationController mRotationController;
+    private final RingerController mRingerController;
 
     private SliderControllerBase mSliderController;
 
@@ -147,6 +150,10 @@ public class KeyHandler implements DeviceKeyHandler {
                     break;
                 case RotationController.ID:
                     mSliderController = mRotationController;
+                    mSliderController.update(actions);
+                    break;
+                case RingerController.ID:
+                    mSliderController = mRingerController;
                     mSliderController.update(actions);
                     break;
             }
@@ -184,6 +191,7 @@ public class KeyHandler implements DeviceKeyHandler {
         mFlashlightController = new FlashlightController(context);
         mBrightnessController = new BrightnessController(context);
         mRotationController = new RotationController(context);
+        mRingerController = new RingerController(context);
 
         mContext.registerReceiver(mUpdateReceiver,
                 new IntentFilter(ACTION_UPDATE_SLIDER_SETTINGS));
