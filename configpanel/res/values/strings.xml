@@ -62,7 +62,6 @@
     <string name="notification_slider_mode_total_silence">Total silence</string>
     <string name="notification_slider_mode_alarms_only">Alarms only</string>
     <string name="notification_slider_mode_priority_only">Priority only</string>
-    <string name="notification_slider_mode_none">None</string>
 
     <string name="notification_slider_usage_title">Use slider for</string>
     <string name="notification_slider_for_notification">Notification</string>
@@ -82,4 +81,5 @@
     <string name="notification_slider_rotation_portrait">Portrait</string>
     <string name="notification_slider_rotation_landscape_90">Landscape (90°)</string>
     <string name="notification_slider_rotation_landscape_270">Landscape (270°)</string>
+    <string name="notification_slider_mode_none">All Notifications</string>
 </resources>
