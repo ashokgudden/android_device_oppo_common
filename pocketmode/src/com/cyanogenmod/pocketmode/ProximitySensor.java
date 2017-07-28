@@ -50,7 +50,7 @@ public class ProximitySensor implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
         boolean isNear = event.values[0] < mSensor.getMaximumRange();
         if (DEBUG) Log.d(TAG, "isNear: " + isNear);
-        FileUtils.writeLine(Constants.FP_PROX_NODE, isNear ? "1" : "0");
+        FileUtils.writeLine(Constants.FP_DISABLE_NODE, isNear ? "1" : "0");
     }
 
     @Override
