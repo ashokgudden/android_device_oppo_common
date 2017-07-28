@@ -18,7 +18,6 @@ package com.cyanogenmod.pocketmode;
 
 class Constants {
 
-    static final String FP_PROX_NODE
-            = "/sys/devices/soc/soc:fpc_fpc1020/proximity_state";
+    static final String FP_DISABLE_NODE = "/proc/fingerprint/disable";
 
 }

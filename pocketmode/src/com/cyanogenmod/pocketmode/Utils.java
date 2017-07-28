@@ -29,7 +29,7 @@ class Utils {
 
     static boolean isSupported(Context context) {
         return context.getResources().getBoolean(config_proximityCheckOnWake) &&
-                FileUtils.isFileWritable(Constants.FP_PROX_NODE);
+                FileUtils.isFileWritable(Constants.FP_DISABLE_NODE);
     }
 
     private static boolean isEnabledByDefault(Context context) {
