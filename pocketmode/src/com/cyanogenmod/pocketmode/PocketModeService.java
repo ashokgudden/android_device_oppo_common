@@ -26,39 +26,53 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 import android.util.Log;
 
+import org.cyanogenmod.internal.util.FileUtils;
+
 public class PocketModeService extends Service {
 
     private static final String TAG = "PocketModeService";
     private static final boolean DEBUG = false;
 
-    private final BroadcastReceiver mScreenStateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-            if (Intent.ACTION_SCREEN_ON.equals(action)) {
-                onDisplayOn();
-            } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
-                onDisplayOff();
-            }
-        }
-    };
-
+    private SettingObserver mSettingObserver;
+    private ScreenReceiver mScreenReceiver;
     private ProximitySensor mProximitySensor;
 
-    private boolean mProximityWakeSupported;
-    private boolean mDefaultProximity;
+    private boolean mIsListeningScreen = false;
+    private boolean mIsListeningProximity = false;
 
     @Override
     public void onCreate() {
         super.onCreate();
         if (DEBUG) Log.d(TAG, "Creating service");
 
+        mSettingObserver = new SettingObserver(this);
+        mScreenReceiver = new ScreenReceiver(this);
         mProximitySensor = new ProximitySensor(this);
 
-        final IntentFilter screenStateFilter = new IntentFilter();
-        screenStateFilter.addAction(Intent.ACTION_SCREEN_ON);
-        screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
-        registerReceiver(mScreenStateReceiver, screenStateFilter);
+        mSettingObserver.enable();
+
+        if (Utils.isProximityCheckEnabled(this)) {
+            mScreenReceiver.enable();
+            mIsListeningScreen = true;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (DEBUG) Log.d(TAG, "Destroying service");
+
+        mSettingObserver.disable();
+
+        if (mIsListeningScreen) {
+            mScreenReceiver.disable();
+            mIsListeningScreen = false;
+        }
+
+        if (mIsListeningProximity) {
+            mProximitySensor.disable();
+            mIsListeningProximity = false;
+        }
     }
 
     @Override
@@ -68,28 +82,39 @@ public class PocketModeService extends Service {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (DEBUG) Log.d(TAG, "Destroying service");
-        unregisterReceiver(mScreenStateReceiver);
-        mProximitySensor.disable();
-    }
-
-    @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 
-    private void onDisplayOn() {
-        if (DEBUG) Log.d(TAG, "Display on");
-        mProximitySensor.disable();
-    }
-
-    private void onDisplayOff() {
-        if (DEBUG) Log.d(TAG, "Display off");
-        if (Utils.isEnabled(this)) {
-            mProximitySensor.enable();
+    void onSettingChange() {
+        if (DEBUG) Log.d(TAG, "Proximity setting changed");
+        if (Utils.isProximityCheckEnabled(this)) {
+            mScreenReceiver.enable();
+            mIsListeningScreen = true;
+        } else if (mIsListeningScreen) {
+            mScreenReceiver.disable();
+            mIsListeningScreen = false;
         }
     }
 
+    void onDisplayOn() {
+        if (DEBUG) Log.d(TAG, "Display on");
+        if (mIsListeningProximity) {
+            mProximitySensor.disable();
+            mIsListeningProximity = false;
+        }
+    }
+
+    void onDisplayOff() {
+        if (DEBUG) Log.d(TAG, "Display off");
+        if (Utils.isFingerprintEnabled(this)) {
+            mProximitySensor.enable();
+            mIsListeningProximity = true;
+        }
+    }
+
+    void onProximityNear(boolean isNear) {
+        if (DEBUG) Log.d(TAG, "onProximityNear: " + isNear);
+        FileUtils.writeLine(Constants.FP_DISABLE_NODE, isNear ? "1" : "0");
+    }
 }
