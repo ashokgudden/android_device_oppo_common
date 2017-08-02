@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2016 The CyanogenMod Project
  *               2017 The LineageOS Project
@@ -26,23 +25,20 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
-import org.cyanogenmod.internal.util.FileUtils;
+class ProximitySensor implements SensorEventListener {
 
-public class ProximitySensor implements SensorEventListener {
-
-    private static final String TAG = "ProximitySensor";
+    private static final String TAG = "PocketModeProximity";
     private static final boolean DEBUG = false;
+
+    private PocketModeService mService;
 
     private SensorManager mSensorManager;
     private Sensor mSensor;
-    private Context mContext;
 
-    private boolean mIsRegistered = false;
-
-    public ProximitySensor(Context context) {
-        mContext = context;
-        mSensorManager = (SensorManager)
-                mContext.getSystemService(Context.SENSOR_SERVICE);
+    ProximitySensor(PocketModeService service) {
+        mService = service;
+        mSensorManager = (SensorManager) service.getSystemService(
+                    Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
     }
 
@@ -50,7 +46,7 @@ public class ProximitySensor implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
         boolean isNear = event.values[0] < mSensor.getMaximumRange();
         if (DEBUG) Log.d(TAG, "isNear: " + isNear);
-        FileUtils.writeLine(Constants.FP_DISABLE_NODE, isNear ? "1" : "0");
+        mService.onProximityNear(isNear);
     }
 
     @Override
@@ -62,15 +58,10 @@ public class ProximitySensor implements SensorEventListener {
         if (DEBUG) Log.d(TAG, "Enabling");
         mSensorManager.registerListener(this, mSensor,
                 SensorManager.SENSOR_DELAY_NORMAL);
-        mIsRegistered = true;
     }
 
     void disable() {
-        if (mIsRegistered) {
-            if (DEBUG) Log.d(TAG, "Disabling");
-            mSensorManager.unregisterListener(this, mSensor);
-            mIsRegistered = false;
-        }
+        if (DEBUG) Log.d(TAG, "Disabling");
+        mSensorManager.unregisterListener(this, mSensor);
     }
-
 }
