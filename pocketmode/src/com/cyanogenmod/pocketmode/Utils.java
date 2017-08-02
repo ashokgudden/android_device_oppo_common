@@ -17,6 +17,7 @@
 package com.cyanogenmod.pocketmode;
 
 import android.content.Context;
+import android.hardware.fingerprint.FingerprintManager;
 
 import cyanogenmod.providers.CMSettings;
 
@@ -37,10 +38,21 @@ class Utils {
                 config_proximityCheckOnWakeEnabledByDefault);
     }
 
-    static boolean isEnabled(Context context) {
+    private static boolean isProximityCheckEnabled(Context context) {
         return CMSettings.System.getInt(context.getContentResolver(),
                 CMSettings.System.PROXIMITY_ON_WAKE,
                 isEnabledByDefault(context) ? 1 : 0) != 0;
+    }
+
+    private static boolean isFingerprintEnabled(Context context) {
+        final FingerprintManager fm = (FingerprintManager) context
+                .getSystemService(Context.FINGERPRINT_SERVICE);
+        return fm.hasEnrolledFingerprints();
+    }
+
+    static boolean isEnabled(Context context) {
+        return isProximityCheckEnabled(context) &&
+                isFingerprintEnabled(context);
     }
 
 }
