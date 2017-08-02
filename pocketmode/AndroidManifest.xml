@@ -17,6 +17,7 @@
     package="com.cyanogenmod.pocketmode"
     android:sharedUserId="android.uid.system">
 
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
     <uses-permission android:name="cyanogenmod.permission.HARDWARE_ABSTRACTION_ACCESS" />
 
     <application
