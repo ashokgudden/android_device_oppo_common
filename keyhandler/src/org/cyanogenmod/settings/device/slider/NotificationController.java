@@ -92,7 +92,12 @@ public final class NotificationController extends SliderControllerBase {
                     mAudioManager.setRingerModeInternal(MODES.get(action));
                     mNotificationManager.setZenMode(Settings.Global.ZEN_MODE_OFF, null, TAG);
                 }
-            }        
+            }
+
+		    if (action == NOTIFICATION_NONE) {
+		        mAudioManager.setRingerModeInternal(MODES.get(NOTIFICATION_RING));
+		    }
+
             return true;
         } else {
             return false;
