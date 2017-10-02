@@ -54,4 +54,10 @@
         <item>50</item>
     </string-array>
 
+    <!-- The default actions of slider when use for caffeine -->
+    <string-array name="config_defaultSliderActionsForCaffeine" translatable="false">
+        <item>64</item>
+        <item>61</item>
+        <item>60</item>
+    </string-array>
 </resources>
