@@ -18,7 +18,10 @@ package org.cyanogenmod.settings.device.slider;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.media.AudioManager;
+import android.os.SystemProperties;
 import android.provider.Settings;
+import android.service.notification.ZenModeConfig;
 import android.util.Log;
 import android.util.SparseIntArray;
 
@@ -34,6 +37,10 @@ public final class NotificationController extends SliderControllerBase {
     private static final int NOTIFICATION_ALARMS_ONLY = 11;
     private static final int NOTIFICATION_PRIORITY_ONLY = 12;
     private static final int NOTIFICATION_NONE = 13;
+    private static final int NOTIFICATION_VIBRATE = 14;
+    private static final int NOTIFICATION_RING = 15;
+
+    private static final String PROP_IGNORE_AUTO = "persist.op.slider_ignore_auto";
 
     private static final SparseIntArray MODES = new SparseIntArray();
     static {
@@ -45,20 +52,46 @@ public final class NotificationController extends SliderControllerBase {
                 Settings.Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS);
         MODES.put(NOTIFICATION_NONE,
                 Settings.Global.ZEN_MODE_OFF);
+        MODES.put(NOTIFICATION_VIBRATE,
+                AudioManager.RINGER_MODE_VIBRATE);
+        MODES.put(NOTIFICATION_RING,
+                AudioManager.RINGER_MODE_NORMAL);
     }
 
     private final NotificationManager mNotificationManager;
+    private final AudioManager mAudioManager;
 
     public NotificationController(Context context) {
         super(context);
         mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE);
+        mAudioManager = getSystemService(Context.AUDIO_SERVICE);
     }
 
     @Override
     protected boolean processAction(int action) {
         Log.d(TAG, "slider action: " + action);
         if (MODES.indexOfKey(action) >= 0) {
-            mNotificationManager.setZenMode(MODES.get(action), null, TAG);
+            boolean ignoreAuto = SystemProperties.get(PROP_IGNORE_AUTO).equals("true");
+            boolean isAutoModeActive = false;
+
+            if (ignoreAuto) {
+                ZenModeConfig zmc = mNotificationManager.getZenModeConfig();
+                int len = zmc.automaticRules.size();
+                for (int i = 0; i < len; i++) {
+                    if (zmc.automaticRules.valueAt(i).isAutomaticActive()) {
+                        isAutoModeActive = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!isAutoModeActive) {
+                if (action <= NOTIFICATION_NONE) {
+                    mNotificationManager.setZenMode(MODES.get(action), null, TAG);
+                } else {
+                    mAudioManager.setRingerModeInternal(MODES.get(action));
+                }
+            }        
             return true;
         } else {
             return false;

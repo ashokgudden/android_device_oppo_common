@@ -25,6 +25,11 @@
         android:key="notification_slider"
         android:title="@string/notification_slider_category_title">
 
+        <SwitchPreference
+            android:key="notification_slider_ignore_auto"
+            android:title="@string/notification_slider_ignore_auto_title"
+            android:summary="@string/notification_slider_ignore_auto_summary" />
+
         <ListPreference
             android:key="slider_usage"
             android:dialogTitle="@string/notification_slider_usage_title"

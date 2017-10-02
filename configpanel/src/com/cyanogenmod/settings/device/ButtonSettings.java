@@ -22,6 +22,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.SystemProperties;
+import android.preference.SwitchPreference;
 import android.os.UserHandle;
 import android.preference.Preference;
 import android.preference.ListPreference;
@@ -35,10 +37,19 @@ import com.cyanogenmod.settings.device.utils.NodePreferenceActivity;
 public class ButtonSettings extends NodePreferenceActivity {
     private static final String TAG = "ButtonSettings";
 
+    private static final String KEY_IGNORE_AUTO = "notification_slider_ignore_auto";
+    private static final String PROP_IGNORE_AUTO = "persist.op.slider_ignore_auto";
+
+    private SwitchPreference mIgnoreAuto;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.button_panel);
+
+        mIgnoreAuto = (SwitchPreference) findPreference(KEY_IGNORE_AUTO);
+        mIgnoreAuto.setOnPreferenceChangeListener(this);
+
         if (Constants.isNotificationSliderSupported()) {
             initNotificationSliderPreference();
         } else {
@@ -67,6 +78,10 @@ public class ButtonSettings extends NodePreferenceActivity {
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         String key = preference.getKey();
         switch (key) {
+            case KEY_IGNORE_AUTO:
+                final boolean value = (Boolean) newValue;
+                SystemProperties.set(PROP_IGNORE_AUTO, value ? "true" : "false");
+                return true;
             case Constants.NOTIF_SLIDER_USAGE_KEY:
                 return handleSliderUsageChange((String) newValue) &&
                         handleSliderUsageDefaultsChange((String) newValue) &&
@@ -250,6 +265,12 @@ public class ButtonSettings extends NodePreferenceActivity {
             Integer.parseInt(actionMiddle),
             Integer.parseInt(actionBottom)
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mIgnoreAuto.setChecked(SystemProperties.get(PROP_IGNORE_AUTO).equals("true"));
     }
 
     private static int getDefaultResIdForUsage(String usage) {
