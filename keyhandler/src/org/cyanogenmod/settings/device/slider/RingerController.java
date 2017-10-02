@@ -16,8 +16,10 @@
 
 package org.cyanogenmod.settings.device.slider;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.media.AudioManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.util.SparseIntArray;
 
@@ -41,10 +43,12 @@ public final class RingerController extends SliderControllerBase {
     }
 
     private final AudioManager mAudioManager;
+    private final NotificationManager mNotificationManager;
 
     public RingerController(Context context) {
         super(context);
         mAudioManager = getSystemService(Context.AUDIO_SERVICE);
+        mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     @Override
@@ -52,6 +56,7 @@ public final class RingerController extends SliderControllerBase {
         Log.d(TAG, "slider action: " + action);
         if (MODES.indexOfKey(action) >= 0) {
             mAudioManager.setRingerModeInternal(MODES.get(action));
+            mNotificationManager.setZenMode(Settings.Global.ZEN_MODE_OFF, null, TAG);
             return true;
         } else {
             return false;
