@@ -33,12 +33,6 @@ public class Constants {
     public static final String TOUCHPAD_DOUBLE_CLICK_STATE_KEY = "touchpad_double_tap_state";
     public static final String TOUCHPAD_DOUBLETAP_KEY = "touchpad_enable_doubletap";
     public static final String TOUCHPAD_LONGPRESS_KEY = "touchpad_enable_longpress";
-    public static final String OCLICK_CONNECT_KEY = "oclick_connect";
-    public static final String OCLICK_DEVICE_ADDRESS_KEY = "oclick_device_address";
-    public static final String OCLICK_SNAPSHOT_KEY = "oclick_take_snapshot";
-    public static final String OCLICK_FIND_PHONE_KEY = "oclick_find_my_phone";
-    public static final String OCLICK_FENCE_KEY = "oclick_fence";
-    public static final String OCLICK_DISCONNECT_ALERT_KEY = "oclick_disconnect_alert";
     public static final String TOUCHSCREEN_CAMERA_GESTURE_KEY = "touchscreen_gesture_camera";
     public static final String TOUCHSCREEN_MUSIC_GESTURE_KEY = "touchscreen_gesture_music";
     public static final String TOUCHSCREEN_FLASHLIGHT_GESTURE_KEY =
@@ -117,8 +111,6 @@ public class Constants {
         sNodeDefaultMap.put(TOUCHPAD_LONGPRESS_KEY, false);
         sNodeDefaultMap.put(BUTTON_SWAP_KEY, false);
 
-        sNodeDefaultMap.put(OCLICK_FENCE_KEY, true);
-        sNodeDefaultMap.put(OCLICK_DISCONNECT_ALERT_KEY, true);
     }
 
     public static boolean isPreferenceEnabled(Context context, String key) {

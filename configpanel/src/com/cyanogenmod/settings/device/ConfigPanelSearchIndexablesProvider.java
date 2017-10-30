@@ -38,8 +38,7 @@ public class ConfigPanelSearchIndexablesProvider extends SearchIndexablesProvide
 
     public static final int SEARCH_IDX_BUTTON_PANEL = 0;
     public static final int SEARCH_IDX_GESTURE_PANEL = 1;
-    public static final int SEARCH_IDX_OCLICK_PANEL = 2;
-    public static final int SEARCH_IDX_TOUCHSCREEN_PANEL = 3;
+    public static final int SEARCH_IDX_TOUCHSCREEN_PANEL = 2;
 
     private static SearchIndexableResource[] INDEXABLE_RES = new SearchIndexableResource[]{
             new SearchIndexableResource(1, R.xml.button_panel,
@@ -48,9 +47,6 @@ public class ConfigPanelSearchIndexablesProvider extends SearchIndexablesProvide
             new SearchIndexableResource(1, R.xml.gesture_panel,
                     GesturePadSettings.class.getName(),
                     R.drawable.ic_settings_gestures),
-            new SearchIndexableResource(1, R.xml.oclick_panel,
-                    BluetoothInputSettings.class.getName(),
-                    R.drawable.ic_oclick_notification),
             new SearchIndexableResource(1, R.xml.touchscreen_panel,
                     TouchscreenGestureSettings.class.getName(),
                     R.drawable.ic_settings_gestures),
@@ -69,9 +65,6 @@ public class ConfigPanelSearchIndexablesProvider extends SearchIndexablesProvide
         }
         if (Startup.hasGestureService(getContext()) /* show gesture panel */) {
             cursor.addRow(generateResourceRef(INDEXABLE_RES[SEARCH_IDX_GESTURE_PANEL]));
-        }
-        if (Startup.hasOClick() /* show oclick panel */) {
-            cursor.addRow(generateResourceRef(INDEXABLE_RES[SEARCH_IDX_OCLICK_PANEL]));
         }
         if (Startup.hasTouchscreenGestures() /* show touchscreen panel */) {
             cursor.addRow(generateResourceRef(INDEXABLE_RES[SEARCH_IDX_TOUCHSCREEN_PANEL]));
