@@ -19,8 +19,11 @@ package com.cyanogenmod.settings.device.utils;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
@@ -76,5 +79,35 @@ public final class FileUtils {
         }
 
         return true;
+    }
+
+    /**
+     * Checks whether the given file exists
+     *
+     * @return true if exists, false if not
+     */
+    public static boolean fileExists(String fileName) {
+        final File file = new File(fileName);
+        return file.exists();
+    }
+
+    /**
+     * Checks whether the given file is readable
+     *
+     * @return true if readable, false if not
+     */
+    public static boolean isFileReadable(String fileName) {
+        final File file = new File(fileName);
+        return file.exists() && file.canRead();
+    }
+
+    /**
+     * Checks whether the given file is writable
+     *
+     * @return true if writable, false if not
+     */
+    public static boolean isFileWritable(String fileName) {
+        final File file = new File(fileName);
+        return file.exists() && file.canWrite();
     }
 }
