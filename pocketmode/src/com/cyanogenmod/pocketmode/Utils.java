@@ -19,12 +19,12 @@ package com.cyanogenmod.pocketmode;
 import android.content.Context;
 import android.hardware.fingerprint.FingerprintManager;
 
-import cyanogenmod.providers.CMSettings;
+import lineageos.providers.LineageSettings;
 
-import org.cyanogenmod.internal.util.FileUtils;
+import org.lineageos.internal.util.FileUtils;
 
-import static org.cyanogenmod.platform.internal.R.bool.config_proximityCheckOnWake;
-import static org.cyanogenmod.platform.internal.R.bool.config_proximityCheckOnWakeEnabledByDefault;
+import static org.lineageos.platform.internal.R.bool.config_proximityCheckOnWake;
+import static org.lineageos.platform.internal.R.bool.config_proximityCheckOnWakeEnabledByDefault;
 
 class Utils {
 
@@ -39,8 +39,8 @@ class Utils {
     }
 
     static boolean isProximityCheckEnabled(Context context) {
-        return CMSettings.System.getInt(context.getContentResolver(),
-                CMSettings.System.PROXIMITY_ON_WAKE,
+        return LineageSettings.System.getInt(context.getContentResolver(),
+                LineageSettings.System.PROXIMITY_ON_WAKE,
                 isEnabledByDefault(context) ? 1 : 0) != 0;
     }
 

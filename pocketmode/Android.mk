@@ -25,7 +25,7 @@ LOCAL_PACKAGE_NAME := OneplusPocketMode
 LOCAL_MODULE_TAGS := optional
 
 LOCAL_STATIC_JAVA_LIBRARIES := \
-    org.cyanogenmod.platform.internal
+    org.lineageos.platform.internal
 
 LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 
