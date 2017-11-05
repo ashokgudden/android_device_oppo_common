@@ -53,6 +53,7 @@ import android.view.KeyEvent;
 import android.view.WindowManagerGlobal;
 
 import com.android.internal.os.DeviceKeyHandler;
+import com.android.internal.util.ArrayUtils;
 
 import java.util.Arrays;
 
@@ -298,12 +299,12 @@ public class KeyHandler implements DeviceKeyHandler {
     }
 
     public boolean handleKeyEvent(KeyEvent event) {
-        if (event.getAction() != KeyEvent.ACTION_UP) {
-            return false;
-        }
+//        if (event.getAction() != KeyEvent.ACTION_UP) {
+//            return false;
+//        }
 
         int scanCode = event.getScanCode();
-        boolean isKeySupported = scanCode == FLIP_CAMERA_SCANCODE;
+        boolean isKeySupported = ArrayUtils.contains(sSupportedGestures, scanCode);
         boolean isSliderControllerSupported = mSliderController != null &&
                 mSliderController.isSupported(scanCode);
         if (!isKeySupported && !isSliderControllerSupported) {
