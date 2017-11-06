@@ -25,6 +25,8 @@
     <string name="group_applications">Applications</string>
     <string name="select_custom_app_title">Select custom application</string>
 
+    <string name="gesture_dashboard_summary">Control touchscreen gestures</string>
+    <string name="slider_dashboard_summary">Control AlertSlider settings</string>
 
     <string name="enable_gestures_title">Enable gestures</string>
     <string name="enable_gestures_summary">Enable screen off gestures</string>

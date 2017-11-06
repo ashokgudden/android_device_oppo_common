@@ -31,6 +31,8 @@
           <meta-data
                 android:name="com.android.settings.icon"
                 android:resource="@drawable/ic_settings_gestures" />
+          <meta-data android:name="com.android.settings.summary"
+                android:resource="@string/gesture_dashboard_summary"/>
           <meta-data
                 android:name="com.android.settings.category"
                 android:value="com.android.settings.category.ia.homepage" />
@@ -46,6 +48,8 @@
             <meta-data
                 android:name="com.android.settings.icon"
                 android:resource="@drawable/ic_settings_additional_buttons" />
+          <meta-data android:name="com.android.settings.summary"
+                android:resource="@string/slider_dashboard_summary"/>
             <meta-data
                 android:name="com.android.settings.category"
                 android:value="com.android.settings.category.ia.homepage" />
