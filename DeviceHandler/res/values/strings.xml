@@ -43,6 +43,9 @@
     <string name="notification_slider">Notification slider</string>
     <string name="action">Action</string>
 
+    <string name="notification_slider_ignore_auto_title">Disable during automatic rules</string>
+    <string name="notification_slider_ignore_auto_summary">Ignore the slider when an automatic rule is active</string>
+
     <string name="top_position">Top position</string>
     <string name="middle_position">Middle position</string>
     <string name="bottom_position">Bottom position</string>

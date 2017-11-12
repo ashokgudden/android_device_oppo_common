@@ -17,6 +17,7 @@
 package com.slim.device.settings;
 
 import android.os.Bundle;
+import android.os.SystemProperties;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
@@ -29,6 +30,11 @@ import com.slim.device.util.FileUtils;
 
 public class SliderSettings extends PreferenceActivity
         implements OnPreferenceChangeListener {
+ 
+    private static final String KEY_IGNORE_AUTO = "notification_slider_ignore_auto";
+    private static final String PROP_IGNORE_AUTO = "persist.op.slider_ignore_auto";
+
+    private SwitchPreference mIgnoreAuto;
 
     private SwitchPreference mSliderSwap;
     private ListPreference mSliderTop;
@@ -39,6 +45,9 @@ public class SliderSettings extends PreferenceActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.slider_panel);
+
+        mIgnoreAuto = (SwitchPreference) findPreference(KEY_IGNORE_AUTO);
+        mIgnoreAuto.setOnPreferenceChangeListener(this);
 
         mSliderSwap = (SwitchPreference) findPreference("button_swap");
         mSliderSwap.setOnPreferenceChangeListener(this);
@@ -74,6 +83,10 @@ public class SliderSettings extends PreferenceActivity
             Boolean value = (Boolean) newValue;
             FileUtils.writeLine(KernelControl.SLIDER_SWAP_NODE, value ? "1" : "0");
             return true;
+        } else if (preference == mIgnoreAuto) {
+            final boolean value = (Boolean) newValue;
+            SystemProperties.set(PROP_IGNORE_AUTO, value ? "true" : "false");
+            return true;
         } else {
             return false;
         }
@@ -87,6 +100,7 @@ public class SliderSettings extends PreferenceActivity
     @Override
     protected void onResume() {
         super.onResume();
+        mIgnoreAuto.setChecked(SystemProperties.get(PROP_IGNORE_AUTO).equals("true"));
 
         // Remove padding around the listview
             getListView().setPadding(0, 0, 0, 0);

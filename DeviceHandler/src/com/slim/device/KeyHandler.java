@@ -64,6 +64,8 @@ public class KeyHandler implements DeviceKeyHandler {
     private static final int MODE_VIBRATE = 604;
     private static final int MODE_RING = 605;
 
+    private static final String PROP_IGNORE_AUTO = "persist.op.slider_ignore_auto";
+
     private static final int[] sSupportedGestures = new int[]{
         GESTURE_CIRCLE_SCANCODE,
         GESTURE_SWIPE_DOWN_SCANCODE,
@@ -190,17 +192,49 @@ public class KeyHandler implements DeviceKeyHandler {
     }
 
     private void setZenMode(int mode) {
-        mNotificationManager.setZenMode(mode, null, TAG);
-        if (mVibrator != null) {
-            mVibrator.vibrate(50);
+        boolean ignoreAuto = SystemProperties.get(PROP_IGNORE_AUTO).equals("true");
+        boolean isAutoModeActive = false;
+
+        if (ignoreAuto) {
+            ZenModeConfig zmc = mNotificationManager.getZenModeConfig();
+            int len = zmc.automaticRules.size();
+            for (int i = 0; i < len; i++) {
+                if (zmc.automaticRules.valueAt(i).isAutomaticActive()) {
+                    isAutoModeActive = true;
+                    break;
+                }
+            }
         }
+
+        if (!isAutoModeActive) {
+            mNotificationManager.setZenMode(mode, null, TAG);
+            if (mVibrator != null) {
+                mVibrator.vibrate(50);
+            }
+        }  
     }
 
     private void setRingerModeInternal(int mode) {
-        mAudioManager.setRingerModeInternal(mode);
-        if (mVibrator != null) {
-            mVibrator.vibrate(50);
+        boolean ignoreAuto = SystemProperties.get(PROP_IGNORE_AUTO).equals("true");
+        boolean isAutoModeActive = false;
+
+        if (ignoreAuto) {
+            ZenModeConfig zmc = mNotificationManager.getZenModeConfig();
+            int len = zmc.automaticRules.size();
+            for (int i = 0; i < len; i++) {
+                if (zmc.automaticRules.valueAt(i).isAutomaticActive()) {
+                    isAutoModeActive = true;
+                    break;
+                }
+            }
         }
+
+        if (!isAutoModeActive) {
+            mAudioManager.setRingerModeInternal(mode);
+            if (mVibrator != null) {
+                mVibrator.vibrate(50);
+            }
+        }  
     }
 
     private void doHapticFeedback() {
